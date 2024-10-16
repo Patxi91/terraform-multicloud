@@ -25,7 +25,7 @@ Steps to follow:
    terraform -v
 
 
-## 2. Use GitHub Codespaces (Free for 60 hours per month)
+## 2. Use GitHub Codespaces (Free for 120 hours per month)
 
 If you prefer using a virtual machine, GitHub Codespaces offers a free option with Ubuntu and Visual Studio Code. Here's how to get started:
 
@@ -64,7 +64,7 @@ Steps to follow:
    terraform -v
    ```
 
-### 2. Use GitHub Codespaces (Free for 60 hours per month)
+### 2. Use GitHub Codespaces (Free for 120 hours per month)
 If you prefer using a virtual machine, GitHub Codespaces offers a free option with Ubuntu and Visual Studio Code. Here's how to get started:
 
 1. Login to your GitHub account.

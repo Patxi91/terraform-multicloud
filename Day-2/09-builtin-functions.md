@@ -51,3 +51,5 @@ output "lookup_value" {
 
 Built-in functions provide powerful tools for data manipulation and enhance the expressiveness of Terraform configurations.
 
+
+[Previous: Conditional Expression](08-conditional-expressions.md) | [Back to README](README.md)

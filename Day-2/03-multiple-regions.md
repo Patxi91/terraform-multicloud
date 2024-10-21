@@ -36,3 +36,6 @@ resource "aws_instance" "west_instance" {
 
 Using multiple regions in your Terraform configuration allows for better resource distribution and redundancy.
 
+
+
+[Previous: Multiple Providers](02-multiple-providers.md) | [Next: Required Providers](04-required-providers.md) | [Back to README](README.md)

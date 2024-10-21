@@ -37,4 +37,4 @@ Specifying required providers ensures that your configuration uses compatible ve
 
 
 
-[Previous: Conditional Expressions](08-conditional-expressions.md) | [Back to README](README.md)
+[Previous: Multiple Regions](03-multiple-regions.md) | [Next: Variables](05-variables.md) | [Back to README](README.md)

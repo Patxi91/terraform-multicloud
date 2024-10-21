@@ -30,3 +30,6 @@ resource "aws_instance" "example" {
 
 Conditional expressions enhance the dynamic capabilities of your Terraform configurations by allowing for different resource configurations based on conditions.
 
+
+
+[Previous: Tfvars](07-tfvars.md) | [Next: Built In Function](09-builtin-functions.md) | [Back to README](README.md)

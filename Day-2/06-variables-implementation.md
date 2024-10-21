@@ -25,3 +25,6 @@ resource "aws_instance" "example" {
   ami           = "ami-0c55b159cbfafe1f0"       # Specify the AMI
   instance_type = var.instance_type              # Use variable for instance type
 }
+
+
+[Previous: Required Providers](05-variables.md) | [Next: Tfvars](07-tfvars.md) | [Back to README](README.md)

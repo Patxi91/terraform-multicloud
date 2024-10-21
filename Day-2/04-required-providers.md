@@ -35,3 +35,6 @@ terraform init -upgrade
 
 Specifying required providers ensures that your configuration uses compatible versions and avoids potential issues during deployment.
 
+
+
+[Previous: Conditional Expressions](08-conditional-expressions.md) | [Back to README](README.md)

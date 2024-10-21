@@ -40,3 +40,7 @@ resource "azurerm_virtual_machine" "example" {
 
 Managing multiple providers allows for more complex and flexible infrastructure setups.
 
+
+
+
+[Previous: Providers](01-providers.md) | [Next: Multiple Regions](03-multiple-regions.md) | [Back to README](README.md)

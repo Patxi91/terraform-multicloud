@@ -30,3 +30,5 @@ resource "aws_instance" "example" {
 
 Variables enhance the flexibility and maintainability of Terraform configurations.
 
+
+[Previous: Required Providers](04-required-providers.md) | [Next: Variables Implementation](06-variables-implementation.md) | [Back to README](README.md)

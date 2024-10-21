@@ -25,3 +25,5 @@ terraform apply -var-file="custom.tfvars"
 
 Using .tfvars files helps keep your configurations clean and allows for different variable sets for different environments.
 
+
+[Previous: Variables Implementation](06-variables-implementation.md) | [Next: Conditional Expression](08-conditional-expressions.md) | [Back to README](README.md)

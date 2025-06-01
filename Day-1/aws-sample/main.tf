@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1" # Specify your AWS region
+  region = "eu-north-1" # Specify your AWS region
 }
 
 

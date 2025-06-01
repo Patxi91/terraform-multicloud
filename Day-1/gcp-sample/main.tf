@@ -1,13 +1,13 @@
 provider "google" {
-  credentials = file("test.json")
-  project     = "aerobic-stream-438614-g1"
-  region      = "us-central1"
+  credentials = file("crucial-study-397313-d99cb5554ead.json")
+  project     = "crucial-study-397313"
+  region      = "europe-north1"
 }
 
 resource "google_compute_instance" "default" {
   name         = "terraform-vm"
   machine_type = "e2-medium"
-  zone         = "us-central1-a"
+  zone         = "europe-north1-a"
 
   # Boot disk configuration
   boot_disk {

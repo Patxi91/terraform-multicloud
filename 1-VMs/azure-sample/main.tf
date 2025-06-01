@@ -1,3 +1,5 @@
+# az ad sp create-for-rbac --name "test-azure" --role "Contributor" --scopes "/subscriptions/8ea744ab-d4a6-4d89-abf6-b53cce59add7"
+
 provider "azurerm" {
   subscription_id = "1a3fd9d6-e403-4468-91af-9387331f4de9"
   features {

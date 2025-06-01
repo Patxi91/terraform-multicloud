@@ -1,7 +1,7 @@
 # az ad sp create-for-rbac --name "test-azure" --role "Contributor" --scopes "/subscriptions/8ea744ab-d4a6-4d89-abf6-b53cce59add7"
 
 provider "azurerm" {
-  subscription_id = "1a3fd9d6-e403-4468-91af-9387331f4de9"
+  subscription_id = "8ea744ab-d4a6-4d89-abf6-b53cce59add7"
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
@@ -17,10 +17,10 @@ terraform {
     key                  = "terraform.tfstate"
   }
 }*/
-# resource "azurerm_resource_group" "example" {
-#   name     = "example-resources5"
-#   location = "West Europe"
-# }
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources5"
+  location = "West Europe"
+}
 resource "azurerm_virtual_network" "example" {
   name                = "example-network3"
   address_space       = ["10.0.0.0/16"]
@@ -48,7 +48,7 @@ resource "azurerm_virtual_machine" "example" {
   location              = "West Europe"
   resource_group_name   = "example-resources5"
   network_interface_ids = [azurerm_network_interface.example.id]
-  vm_size               = "Standard_DS1_v2"
+  vm_size               = "Standard_B1s"
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"

@@ -10,7 +10,7 @@ resource "google_compute_instance" "default" {
   zone         = "us-central1-a"
 
   # Boot disk configuration
- boot_disk {
+  boot_disk {
     initialize_params {
       # Dynamically fetch the latest Debian image
       image = "debian-cloud/debian-11"
@@ -19,7 +19,7 @@ resource "google_compute_instance" "default" {
 
 
   # Network interface
- network_interface {
+  network_interface {
     network = "default"
     access_config {}
   }

@@ -10,25 +10,25 @@ To create resources in different regions, define multiple provider configuration
 
 ```hcl
 provider "aws" {
-  region = "us-east-1"
-  alias  = "east"
+  region = "eu-north-1"
+  alias  = "north_eu"
 }
 
 provider "aws" {
-  region = "us-west-2"
-  alias  = "west"
+  region = "eu-west-1"
+  alias  = "west_eu"
 }
 
-resource "aws_instance" "east_instance" {
-  provider      = aws.east
+resource "aws_instance" "north_instance" {
+  provider      = aws.north_eu
   ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 }
 
-resource "aws_instance" "west_instance" {
-  provider      = aws.west
+resource "aws_instance" "west_europe_instance" {
+  provider      = aws.west_eu
   ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 }
 ```
 

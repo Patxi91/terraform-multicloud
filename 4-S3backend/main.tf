@@ -1,14 +1,14 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-north-1"
 }
 
 resource "aws_instance" "example" {
-  instance_type = "t2.micro"
-  ami           = "ami-053b0d53c279acc90" # change this
+  instance_type = "t3.micro"
+  ami           = "ami-0c1ac8a41498c1a9c" # change this
 }
 
 resource "aws_s3_bucket" "s3_bucket" {
-  bucket = "s3cloudhub-s3-demo-xyz" # change this
+  bucket = "mys3-demo-20250602" # change this
 }
 
 resource "aws_dynamodb_table" "terraform_lock" {

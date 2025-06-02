@@ -9,21 +9,21 @@ This document demonstrates how to implement variables within a Terraform configu
 ```hcl
 variable "region" {
   description = "The AWS region to deploy in"  # Description of the variable
-  default     = "us-east-1"                    # Default region
+  default     = "eu-north-1"                   # Default region changed to eu-north-1
 }
 
 variable "instance_type" {
-  description = "AWS instance type"             # Description of the variable
-  default     = "t2.micro"                       # Default instance type
+  description = "AWS instance type"            # Description of the variable
+  default     = "t3.micro"                     # Default instance type changed to t3.micro
 }
 
 provider "aws" {
-  region = var.region                             # Use variable for provider region
+  region = var.region                          # Use variable for provider region
 }
 
 resource "aws_instance" "example" {
-  ami           = "ami-0c55b159cbfafe1f0"       # Specify the AMI
-  instance_type = var.instance_type              # Use variable for instance type
+  ami           = "ami-0c55b159cbfafe1f0"      # Specify the AMI
+  instance_type = var.instance_type            # Use variable for instance type
 }
 ```
 

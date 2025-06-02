@@ -10,7 +10,7 @@ To define a provider, include the provider block in your Terraform configuration
 
 ```hcl
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-north-1"
 }
 ```
 

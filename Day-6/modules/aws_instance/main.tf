@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-north-1"
 }
 
 variable "ami" {
@@ -7,7 +7,7 @@ variable "ami" {
 }
 
 variable "instance_type" {
-  description = "This is the instance type, for example: t2.micro"
+  description = "This is the instance type, for example: t3.micro"
 }
 
 resource "aws_instance" "example" {

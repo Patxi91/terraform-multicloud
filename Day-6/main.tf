@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-north-1"
 }
 
 variable "ami" {
@@ -11,14 +11,14 @@ variable "instance_type" {
   type        = map(string)
 
   default = {
-    "dev"   = "t2.micro"
-    "stage" = "t2.medium"
-    "prod"  = "t2.xlarge"
+    "dev"   = "t3.micro"
+    "stage" = "t3.medium"
+    "prod"  = "t3.xlarge"
   }
 }
 
-module "ec2_instance" {
-  source        = "./modules/ec2_instance"
+module "aws_instance" {
+  source        = "./modules/aws_instance"
   ami           = var.ami
-  instance_type = lookup(var.instance_type, terraform.workspace, "t2.micro")
+  instance_type = lookup(var.instance_type, terraform.workspace, "t3.micro")
 }

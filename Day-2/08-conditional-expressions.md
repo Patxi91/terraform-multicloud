@@ -22,7 +22,7 @@ variable "environment" {
 
 resource "aws_instance" "example" {
   ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = var.environment == "production" ? "t2.large" : "t2.micro"
+  instance_type = var.environment == "production" ? "t3.large" : "t3.micro"
 }
 ```
 

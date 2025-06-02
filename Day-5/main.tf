@@ -119,20 +119,26 @@ resource "null_resource" "app_deployer" {
     inline = [
       "echo 'Starting application deployment...'",
       "sudo apt update -y",
-      "sudo apt-get install -y python3-venv",
-
+      "sudo apt-get install -y python3-venv", # Install the package needed for virtual environments
       "cd /home/ubuntu",
 
+      # Create the virtual environment named 'app_venv' if it doesn't exist.
       "if [ ! -d \"app_venv\" ]; then python3 -m venv app_venv; fi",
 
+      # Install Flask into the virtual environment using its specific pip.
+      # This command will only install if needed, or update if a new version is specified.
       "/home/ubuntu/app_venv/bin/pip install flask",
 
+      # Ensure app.py has execute permissions (good practice for scripts)
       "chmod +x app.py",
 
+      # Kill any existing app.py processes before starting a new one.
+      # '|| true' ensures the command doesn't fail the provisioner if no process is found.
       "sudo pkill -f \"python3.*app.py\" || true",
 
       # setsid to run the command in a new session, fully detached for processes that need to persist after SSH.
       "sudo setsid /home/ubuntu/app_venv/bin/python3 /home/ubuntu/app.py > /dev/null 2>&1 < /dev/null &",
+      "sleep 2", # Add a short delay to allow the background process to fully detach
       "echo 'Flask app deployed and started successfully on port 80.'"
     ]
   }

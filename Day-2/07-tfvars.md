@@ -9,8 +9,8 @@ Variable files (with the .tfvars extension) allow you to define variable values 
 Create a file named `terraform.tfvars`:
 
 ```hcl
-region         = "us-east-1"
-instance_type  = "t2.micro"
+region        = "eu-north-1"
+instance_type = "t3.micro"
 ```
 
 ## Using .tfvars Files

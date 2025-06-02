@@ -11,7 +11,7 @@ You can define variables using the `variable` block:
 ```hcl
 variable "instance_type" {
   description = "Type of instance to create"
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 ```
 

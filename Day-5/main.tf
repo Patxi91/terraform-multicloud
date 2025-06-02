@@ -10,7 +10,7 @@ variable "cidr" {
 resource "aws_key_pair" "example" {
   key_name   = "terraform-demo-20250602"  # Replace with your desired key name
   public_key = file("~/.ssh/id_rsa.pub")  # Replace with the path to your public key file, then "ssh-keygen -t rsa"
-}
+}  # Then: ssh -i ~/.ssh/id_rsa.pub ubuntu@EC2_PUBLIC_IP
 
 resource "aws_vpc" "myvpc" {
   cidr_block = var.cidr
@@ -79,27 +79,72 @@ resource "aws_instance" "server" {
   vpc_security_group_ids = [aws_security_group.websg.id]
   subnet_id              = aws_subnet.sub1.id
 
+  # The connection block is still needed here for Terraform to manage the instance lifecycle
   connection {
     type        = "ssh"
-    user        = "ubuntu"              # Replace with the appropriate username for your EC2 instance
-    private_key = file("~/.ssh/id_rsa") # Replace with the path to your private key
+    user        = "ubuntu"
+    private_key = file("~/.ssh/id_rsa") # Make sure this path is correct on your local machine
     host        = self.public_ip
   }
 
-  # File provisioner to copy a file from local to the remote EC2 instance
-  provisioner "file" {
-    source      = "app.py"              # Replace with the path to your local file
-    destination = "/home/ubuntu/app.py" # Replace with the path on the remote instance
+  # IMPORTANT: The file and remote-exec provisioners are REMOVED from here.
+  # They are moved to the null_resource below for application deployment.
+}
+
+# This null_resource is specifically for deploying and updating the Flask application.
+resource "null_resource" "app_deployer" {
+
+  depends_on = [aws_instance.server]
+
+  # Triggers block for redeployment.
+  triggers = {
+    app_py_checksum = filemd5("app.py")
   }
 
+  # Connection block for the null_resource, connecting to the EC2 instance
+  connection {
+    type        = "ssh"
+    user        = "ubuntu"
+    private_key = file("~/.ssh/id_rsa") # Ensure this path is correct for your local machine
+    host        = aws_instance.server.public_ip
+  }
+
+  # File provisioner to copy app.py from local to the remote EC2 instance
+  provisioner "file" {
+    source      = "app.py"
+    destination = "/home/ubuntu/app.py"
+  }
+
+  # Remote-exec provisioner to install dependencies and start/restart the app
   provisioner "remote-exec" {
     inline = [
-      "echo 'Hello from the remote instance'",
-      "sudo apt update -y",                  # Update package lists (for ubuntu)
-      "sudo apt-get install -y python3-pip", # Example package installation
-      "cd /home/ubuntu",
-      "sudo pip3 install flask",
-      "sudo python3 app.py &",
+      "echo 'Starting application deployment...'",
+      "sudo apt update -y",
+      "sudo apt-get install -y python3-venv", # Install the package needed for virtual environments
+
+      "cd /home/ubuntu", # Navigate to the directory where app.py is located
+
+      # Create the virtual environment named 'app_venv' if it doesn't exist.
+      # The 'if [ ! -d ... ]' check prevents errors if the venv already exists.
+      "if [ ! -d \"app_venv\" ]; then python3 -m venv app_venv; fi",
+
+      # Install Flask into the virtual environment using its specific pip.
+      # This command will only install if needed, or update if a new version is specified.
+      "/home/ubuntu/app_venv/bin/pip install flask",
+
+      # Ensure app.py has execute permissions (good practice for scripts)
+      "chmod +x app.py",
+
+      # Kill any existing app.py processes before starting a new one.
+      # '|| true' ensures the command doesn't fail the provisioner if no process is found.
+      "sudo pkill -f \"python3.*app.py\" || true",
+
+      # Run the Flask app on port 80 using the virtual environment's Python and sudo.
+      # nohup ensures it keeps running after SSH disconnects.
+      # > /dev/null 2>&1 redirects all output to prevent clutter.
+      # & runs the command in the background.
+      "nohup sudo /home/ubuntu/app_venv/bin/python3 /home/ubuntu/app.py > /dev/null 2>&1 &",
+      "echo 'Flask app deployed and started successfully on port 80.'"
     ]
   }
 }

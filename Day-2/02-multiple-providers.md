@@ -10,7 +10,7 @@ You can define multiple providers by specifying them with different configuratio
 
 ```hcl
 provider "aws" {
-  region = "us-east-1"
+  region = "eu-north-1"
 }
 
 provider "azurerm" {
@@ -25,12 +25,12 @@ To use resources from multiple providers, you can reference them in your configu
 ```hcl
 resource "aws_instance" "example" {
   ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t2.micro"
+  instance_type = "t3.micro"
 }
 
 resource "azurerm_virtual_machine" "example" {
   name                  = "example-vm"
-  location              = "West US"
+  location              = "North Europe"
   resource_group_name   = azurerm_resource_group.example.name
   network_interface_ids = [azurerm_network_interface.example.id]
 }

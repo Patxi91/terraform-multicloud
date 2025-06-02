@@ -1,6 +1,6 @@
 # Define the AWS provider configuration.
 provider "aws" {
-  region = "us-east-1" # Replace with your desired AWS region.
+  region = "eu-north-1"  # Replace with your desired AWS region.
 }
 
 variable "cidr" {
@@ -8,8 +8,8 @@ variable "cidr" {
 }
 
 resource "aws_key_pair" "example" {
-  key_name   = "terraform-demo-s3cloudhub" # Replace with your desired key name
-  public_key = file("~/.ssh/id_rsa.pub")   # Replace with the path to your public key file
+  key_name   = "terraform-demo-20250602"  # Replace with your desired key name
+  public_key = file("~/.ssh/id_rsa.pub")  # Replace with the path to your public key file, then "ssh-keygen -t rsa"
 }
 
 resource "aws_vpc" "myvpc" {
@@ -19,7 +19,7 @@ resource "aws_vpc" "myvpc" {
 resource "aws_subnet" "sub1" {
   vpc_id                  = aws_vpc.myvpc.id
   cidr_block              = "10.0.0.0/24"
-  availability_zone       = "us-east-1a"
+  availability_zone       = "eu-north-1-hel-1a"
   map_public_ip_on_launch = true
 }
 
@@ -27,7 +27,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.myvpc.id
 }
 
-resource "aws_route_table" "RT" {
+resource "aws_route_table" "rt" {
   vpc_id = aws_vpc.myvpc.id
 
   route {
@@ -38,10 +38,10 @@ resource "aws_route_table" "RT" {
 
 resource "aws_route_table_association" "rta1" {
   subnet_id      = aws_subnet.sub1.id
-  route_table_id = aws_route_table.RT.id
+  route_table_id = aws_route_table.rt.id
 }
 
-resource "aws_security_group" "webSg" {
+resource "aws_security_group" "websg" {
   name   = "web"
   vpc_id = aws_vpc.myvpc.id
 
@@ -73,10 +73,10 @@ resource "aws_security_group" "webSg" {
 }
 
 resource "aws_instance" "server" {
-  ami                    = "ami-0261755bbcb8c4a84"
-  instance_type          = "t2.micro"
+  ami                    = "ami-0c1ac8a41498c1a9c"
+  instance_type          = "t3.micro"
   key_name               = aws_key_pair.example.key_name
-  vpc_security_group_ids = [aws_security_group.webSg.id]
+  vpc_security_group_ids = [aws_security_group.websg.id]
   subnet_id              = aws_subnet.sub1.id
 
   connection {

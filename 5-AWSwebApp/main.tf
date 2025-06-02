@@ -1,6 +1,6 @@
 # Define the AWS provider configuration.
 provider "aws" {
-  region = "eu-north-1"  # Replace with your desired AWS region.
+  region = "eu-north-1" # Replace with your desired AWS region.
 }
 
 variable "cidr" {
@@ -8,9 +8,9 @@ variable "cidr" {
 }
 
 resource "aws_key_pair" "example" {
-  key_name   = "terraform-demo-20250602"  # Replace with your desired key name
-  public_key = file("~/.ssh/id_rsa.pub")  # Replace with the path to your public key file, then "ssh-keygen -t rsa"
-}  # Then: ssh -i ~/.ssh/id_rsa.pub ubuntu@EC2_PUBLIC_IP
+  key_name   = "terraform-demo-20250602" # Replace with your desired key name
+  public_key = file("~/.ssh/id_rsa.pub") # Replace with the path to your public key file, then "ssh-keygen -t rsa"
+}                                        # Then: ssh -i ~/.ssh/id_rsa.pub ubuntu@EC2_PUBLIC_IP
 
 resource "aws_vpc" "myvpc" {
   cidr_block = var.cidr

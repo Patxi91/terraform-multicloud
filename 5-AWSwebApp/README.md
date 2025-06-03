@@ -72,6 +72,6 @@ This file contains annotated explanations of the Terraform resources used to dep
 
 ## 🌍 Access Your App
 
-Visit [http://16.171.113.48/](http://16.171.113.48/) to view the running Flask application.
+Visit [http://13.49.140.249/](http://13.49.140.249/) to view the running Flask application.
 
 ![Running Flask App](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDU3aGtsOHg4cDMxNzN5Yzh4cHc5NmcycjU2Y2RpZGloN2ZyMm51YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/2snL26Wsqbiec/giphy.gif)

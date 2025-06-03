@@ -122,6 +122,7 @@ resource "null_resource" "app_deployer" {
       "echo 'Starting application deployment...'",
       "sudo apt update -y",
       "sudo apt-get install -y python3-venv",
+
       "cd /home/ubuntu",
 
       # Create the virtual environment named 'app_venv' if it doesn't exist.
@@ -130,18 +131,19 @@ resource "null_resource" "app_deployer" {
       # Ensure pip is up-to-date within the virtual environment first.
       "/home/ubuntu/app_venv/bin/pip install --upgrade pip",
 
-      # Install Flask into the virtual environment using its specific pip.
-      "/home/ubuntu/app_venv/bin/pip install flask",
+      # Install Flask and requests into the virtual environment using its specific pip.
+      "/home/ubuntu/app_venv/bin/pip install flask requests",
 
       # Ensure app.py has execute permissions (good practice for scripts)
       "chmod +x app.py",
 
       # Kill any existing app.py processes before starting a new one.
-      "sudo pkill -f \"python3.*app.py\" || true",
+      "pkill -f '/home/ubuntu/app_venv/bin/python3 /home/ubuntu/app.py' || true",
 
-      # setsid to run the command in a new session, fully detached for processes that need to persist after SSH.
-      "sudo setsid /home/ubuntu/app_venv/bin/python3 /home/ubuntu/app.py > /dev/null 2>&1 < /dev/null &",
-      "sleep 2", # Add a short delay to allow the background process to fully detach
+      # Run the Flask app in background using nohup, with logging, with sudo to allow port 80 binding
+      "nohup sudo /home/ubuntu/app_venv/bin/python3 /home/ubuntu/app.py > flask.log 2>&1 &",
+
+      "sleep 1",
       "echo 'Flask app deployed and started successfully on port 80.'"
     ]
   }

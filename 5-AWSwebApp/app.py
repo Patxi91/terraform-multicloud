@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for
 import requests
 
 app = Flask(__name__)
@@ -13,15 +13,26 @@ def get_location(ip):
     except Exception:
         return "Unknown location"
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def landing():
     gif_url = "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHVjcXdxcjRndmp6Y2c5MGl4dm45NDJ2cDdmeXNna2w3M25xbHJoNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QS0KOjNRG0tfG/giphy.gif"
+    valid_routes = {"meme", "oscar", "javi"}
+
+    if request.method == "POST":
+        code_entered = request.form.get("code", "").lower()
+        if code_entered in valid_routes:
+            return redirect(url_for(code_entered))
+        else:
+            error_msg = "Invalid code. Please try again."
+    else:
+        error_msg = ""
+
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>The Matrix Awaits</title>
         <style>
             body {{
@@ -37,16 +48,53 @@ def landing():
                 margin-top: 30px;
                 border: 2px solid #0f0;
             }}
+            form {{
+                margin-top: 30px;
+            }}
+            input[type="text"] {{
+                padding: 10px;
+                font-size: 1em;
+                border: 2px solid #0f0;
+                background-color: #000;
+                color: #0f0;
+                width: 200px;
+                border-radius: 5px;
+            }}
+            input[type="submit"] {{
+                padding: 10px 20px;
+                font-size: 1em;
+                background-color: #0f0;
+                border: none;
+                color: #000;
+                cursor: pointer;
+                border-radius: 5px;
+                margin-left: 10px;
+            }}
+            .error {{
+                color: red;
+                margin-top: 15px;
+                font-weight: bold;
+            }}
         </style>
     </head>
     <body>
         <h1>Welcome to the Matrix.</h1>
         <p>If you know the code, you may enter.</p>
-        <img src="{gif_url}" alt="Matrix GIF">
+        <img src="{gif_url}" alt="Matrix GIF" />
+
+        <form method="POST">
+            <label for="code">Code:</label>
+            <input type="text" id="code" name="code" required autocomplete="off" />
+            <input type="submit" value="Enter" />
+        </form>
+
+        {"<div class='error'>" + error_msg + "</div>" if error_msg else ""}
     </body>
     </html>
     """
     return html_content
+
+# The rest of your routes remain unchanged:
 
 @app.route("/meme")
 def meme():

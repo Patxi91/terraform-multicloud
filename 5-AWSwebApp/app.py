@@ -3,6 +3,13 @@ import requests
 
 app = Flask(__name__)
 
+def get_client_ip():
+    if request.headers.getlist("X-Forwarded-For"):
+        ip = request.headers.getlist("X-Forwarded-For")[0].split(",")[0].strip()
+    else:
+        ip = request.remote_addr
+    return ip
+
 def get_location(ip):
     try:
         response = requests.get(f"https://ipapi.co/{ip}/json/")
@@ -94,12 +101,10 @@ def landing():
     """
     return html_content
 
-# The rest of your routes remain unchanged:
-
 @app.route("/meme")
 def meme():
     gif_url = "https://media1.giphy.com/media/h6kmhiU4z5LkIV7HiQ/giphy.gif"
-    ip = request.remote_addr
+    ip = get_client_ip()
     location = get_location(ip)
     html_content = f"""
     <!DOCTYPE html>
@@ -141,7 +146,7 @@ def meme():
 @app.route("/oscar")
 def oscar():
     gif_url = "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdDA5NmlreHBqZTV4a2IyMHJ6b250MHJyaDZ4azRpbTRvbDR2NDB6cCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/599I8Qbr533P2/giphy.gif"
-    ip = request.remote_addr
+    ip = get_client_ip()
     location = get_location(ip)
     html_content = f"""
     <!DOCTYPE html>
@@ -183,7 +188,7 @@ def oscar():
 @app.route("/javi")
 def javi():
     gif_url = "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnB5Njl6cW1kbGF0YTE5MXE2N2R6ejBrMDFidWZubXpnc2ljdWdmNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/h2GpJK6ljDJJnLDWUA/giphy.gif"
-    ip = request.remote_addr
+    ip = get_client_ip()
     location = get_location(ip)
     html_content = f"""
     <!DOCTYPE html>

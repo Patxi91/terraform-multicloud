@@ -99,7 +99,7 @@ resource "null_resource" "app_deployer" {
   # Triggers block for redeployment.
   triggers = {
     app_py_checksum = filemd5("app.py")  # app changes
-    server_id       = aws_instance.server.id  # server changes - This will trigger on replacement
+    server_id       = aws_instance.server.id    # server changes - This will trigger on replacement
   }
 
   # Connect null_resource to the EC2 instance
@@ -121,21 +121,22 @@ resource "null_resource" "app_deployer" {
     inline = [
       "echo 'Starting application deployment...'",
       "sudo apt update -y",
-      "sudo apt-get install -y python3-venv", # Install the package needed for virtual environments
+      "sudo apt-get install -y python3-venv",
       "cd /home/ubuntu",
 
       # Create the virtual environment named 'app_venv' if it doesn't exist.
-      "if [ ! -d \"app_venv\"]; then python3 -m venv app_venv; fi",
+      "if [ ! -d \"app_venv\" ]; then python3 -m venv app_venv; fi",
+
+      # Ensure pip is up-to-date within the virtual environment first.
+      "/home/ubuntu/app_venv/bin/pip install --upgrade pip",
 
       # Install Flask into the virtual environment using its specific pip.
-      # This command will only install if needed, or update if a new version is specified.
       "/home/ubuntu/app_venv/bin/pip install flask",
 
       # Ensure app.py has execute permissions (good practice for scripts)
       "chmod +x app.py",
 
       # Kill any existing app.py processes before starting a new one.
-      # '|| true' ensures the command doesn't fail the provisioner if no process is found.
       "sudo pkill -f \"python3.*app.py\" || true",
 
       # setsid to run the command in a new session, fully detached for processes that need to persist after SSH.

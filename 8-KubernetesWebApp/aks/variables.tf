@@ -31,7 +31,7 @@ variable "node_count" {
 variable "vm_size" {
   description = "The size of the Virtual Machine for the AKS nodes. 'Standard_B1s' is one of the smallest and cheapest available."
   type        = string
-  default     = "Standard_B1s"
+  default     = "Standard_B2s"
 }
 
 variable "os_disk_size_gb" {

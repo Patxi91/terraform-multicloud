@@ -27,9 +27,8 @@ resource "azurerm_kubernetes_cluster" "aks_cluster" {
     os_disk_size_gb = var.os_disk_size_gb
   }
 
-  service_principal {
-    client_id     = var.app_id
-    client_secret = var.client_secret
+  identity {
+    type = "SystemAssigned" # Managed Identity for AKS
   }
 
   role_based_access_control {

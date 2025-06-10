@@ -28,45 +28,79 @@ The following Terraform files define the resources for the AKS cluster:
 Follow these steps to deploy the Azure AKS cluster:
 
 1.  **Navigate to the AKS directory:**
+
     ```bash
     cd aks/
     ```
 
 2.  **Initialize Terraform:**
     This command downloads the necessary Azure provider plugins.
+
     ```bash
     terraform init
     ```
 
 3.  **Validate the Configuration (Optional but Recommended):**
     Checks the syntax and configuration for errors.
+
     ```bash
     terraform validate
     ```
 
 4.  **Review the Deployment Plan:**
     This command shows you what resources Terraform will create, modify, or destroy.
+
     ```bash
     terraform plan
     ```
 
 5.  **Apply the Configuration:**
     This will provision the AKS cluster and associated resources in your Azure account. This step can take approximately 10-15 minutes.
+
     ```bash
     terraform apply
     ```
     You will be prompted to confirm the action by typing `yes`.
 
-6.  **Configure kubectl (after successful deployment):**
-    Once the cluster is ready, configure `kubectl` to connect to your new AKS cluster:
-    ```bash
-    az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw cluster_name)
-    ```
-    *Note: The `terraform output -raw` commands assume you have set `resource_group_name` and `cluster_name` as outputs in your `outputs.tf` for easy retrieval.*
+## 👩‍💻 Working with kubectl
 
-7.  **Verify Cluster Connection:**
-    Check your cluster information to confirm `kubectl` is properly configured:
+After successfully deploying the AKS cluster, you'll configure `kubectl` to interact with your new cluster.
+
+1.  **Configure kubectl:**
+    Run the following command to set up `kubectl` to connect to your new AKS cluster:
+
+    ```bash
+    az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw aks_cluster_name)
+    ```
+    *Note: The `terraform output -raw` commands assume you have set `resource_group_name` and `aks_cluster_name` as outputs in your `outputs.tf` for easy retrieval.*
+
+2.  **Verify Cluster Connection:**
+    Check your cluster information to confirm `kubectl` is properly configured. You should see details about your cluster's control plane:
+
     ```bash
     kubectl cluster-info
     ```
-    
+
+3.  **Example: Listing all resources in the default namespace:**
+    Once connected, you can start interacting with your Kubernetes cluster. You should see output similar to this, indicating that your cluster is operational:
+
+    ```bash
+    kubectl get all
+    ```
+
+**Browse the AKS Cluster Dashboard**
+
+You can also open the Azure portal's Kubernetes dashboard view for your cluster directly using the Azure CLI:
+
+```bash
+az aks browse --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw kubernetes_cluster_name)
+
+```
+## 🧹 Clean Up Resources (Optional)
+
+To avoid incurring ongoing costs, you can remove all the resources provisioned by this Terraform configuration when you are finished.
+
+```bash
+terraform destroy
+```
+You will be prompted to confirm the action by typing `yes`.

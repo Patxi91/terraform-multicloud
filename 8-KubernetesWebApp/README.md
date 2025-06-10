@@ -50,3 +50,59 @@ Set-ExecutionPolicy Bypass -Scope Process -Force;
 [System.Net.ServicePointManager]::SecurityProtocol = 
 [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 ```
+
+### 2. Install Prerequisites: AKS
+
+**Install Azure CLI & Kubectl on macOS or Linux:**
+
+```bash
+brew install azure-cli
+brew install kubernetes-cli
+az login
+```
+
+**Install Azure CLI & Kubectl on Windows:**
+
+```bash
+choco install azure-cli
+choco install kubernetes-cli
+az login
+```
+
+### 3. Install Prerequisites: EKS
+
+**Install AWS CLI & Kubectl on macOS or Linux:**
+
+```bash
+brew install aws-cli
+brew install kubernetes-cli
+aws configure
+```
+
+**Install AWS CLI & Kubectl on Windows:**
+
+```bash
+choco install aws-cli
+choco install kubernetes-cli
+aws configure
+```
+
+### 4. Install Prerequisites: GKE
+
+**Install Google Cloud SDK, Kubectl and ADC on macOS or Linux:**
+
+```bash
+brew install --cask google-cloud-sdk
+brew install kubernetes-cli
+gcloud init
+gcloud auth application-default login
+```
+
+**Install Google Cloud SDK, Kubectl and ADC on Windows:**
+
+```bash
+choco install gcloudsdk
+choco install kubernetes-cli
+gcloud init
+gcloud auth application-default login
+```

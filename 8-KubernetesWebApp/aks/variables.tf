@@ -40,19 +40,6 @@ variable "os_disk_size_gb" {
   default     = 30 # Minimum recommended OS disk size for AKS
 }
 
-variable "app_id" {
-  description = "The Client ID (App ID) for the Service Principal used by AKS."
-  type        = string
-  # IMPORTANT: Do not hardcode sensitive values here. Use a .tfvars file or environment variables.
-}
-
-variable "client_secret" {
-  description = "The Client Secret (Password) for the Service Principal used by AKS."
-  type        = string
-  sensitive   = true # Marks the variable as sensitive to prevent it from being shown in plan/apply output.
-  # IMPORTANT: Do not hardcode sensitive values here. Use a .tfvars file or environment variables.
-}
-
 variable "environment_tag" {
   description = "Environment tag (e.g., 'Dev', 'Prod', 'Demo')."
   type        = string

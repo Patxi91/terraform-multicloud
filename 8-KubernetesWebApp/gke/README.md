@@ -27,34 +27,48 @@ The following Terraform files define the resources for the GKE cluster:
 
 Follow these steps to deploy the Google GKE cluster:
 
-1.  **Navigate to the GKE directory:**
+1.  **Configure Project ID and Region:**
+    Before initializing Terraform, you need to provide your Google Cloud Project ID and confirm the region in the `terraform.tfvars` file.
+    * Open the `terraform.tfvars` file located in this directory.
+    * Retrieve your current Google Cloud Project ID by running the following command in your terminal:
+        ```bash
+        gcloud config get-value project
+        ```
+    * Replace `<PROJECT_ID>` in `terraform.tfvars` with the actual Project ID you obtained from the command above. The `region` should already be set to `europe-north1` (Stockholm).
+        ```terraform
+        # terraform.tfvars content example:
+        project_id = "your-actual-project-id" # Replace with the output of gcloud command
+        region     = "europe-north1"          # Stockholm region
+        ```
+
+2.  **Navigate to the GKE directory:**
 
     ```bash
     cd gke/
     ```
 
-2.  **Initialize Terraform:**
+3.  **Initialize Terraform:**
     This command downloads the necessary Google Cloud provider plugins.
 
     ```bash
     terraform init
     ```
 
-3.  **Validate the Configuration (Optional but Recommended):**
+4.  **Validate the Configuration (Optional but Recommended):**
     Checks the syntax and configuration for errors.
 
     ```bash
     terraform validate
     ```
 
-4.  **Review the Deployment Plan:**
+5.  **Review the Deployment Plan:**
     This command shows you what resources Terraform will create, modify, or destroy.
 
     ```bash
     terraform plan
     ```
 
-5.  **Apply the Configuration:**
+6.  **Apply the Configuration:**
     This will provision the GKE cluster and associated resources in your Google Cloud account. This step can take approximately 10-20 minutes.
 
     ```bash
@@ -94,3 +108,4 @@ To avoid incurring ongoing costs, you can remove all the resources provisioned b
 
 ```bash
 terraform destroy
+```

@@ -11,7 +11,7 @@ To successfully deploy the GKE cluster using the configurations in this folder, 
 * **kubectl:** The Kubernetes command-line tool, used to interact with the GKE cluster once provisioned.
 * **Terraform:** Installed and configured.
 
-*(For general project prerequisites and setup instructions, refer to the [main README.md](../README.md) in the repository root.)*
+*(For general project prerequisites and setup instructions, refer to the \[main README.md](../README.md) in the repository root.)*
 
 ## 📂 Resources (Terraform Configuration Files)
 
@@ -29,51 +29,63 @@ Follow these steps to deploy the Google GKE cluster:
 
 1.  **Configure Project ID and Region:**
     Before initializing Terraform, you need to provide your Google Cloud Project ID and confirm the region in the `terraform.tfvars` file.
+
     * Open the `terraform.tfvars` file located in this directory.
     * Retrieve your current Google Cloud Project ID by running the following command in your terminal:
+
         ```bash
         gcloud config get-value project
         ```
     * Replace `<PROJECT_ID>` in `terraform.tfvars` with the actual Project ID you obtained from the command above. The `region` should already be set to `europe-north1` (Stockholm).
+
         ```terraform
         # terraform.tfvars content example:
         project_id = "your-actual-project-id" # Replace with the output of gcloud command
         region     = "europe-north1"          # Stockholm region
         ```
 
-2.  **Navigate to the GKE directory:**
+2.  **Enable Required APIs:**
+    Before you can create a GKE cluster, you need to enable the Compute Engine and Kubernetes Engine APIs. Run the following commands:
+
+    ```bash
+    gcloud services enable compute.googleapis.com
+    gcloud services enable container.googleapis.com
+    ```
+
+3.  **Navigate to the GKE directory:**
 
     ```bash
     cd gke/
     ```
 
-3.  **Initialize Terraform:**
+4.  **Initialize Terraform:**
     This command downloads the necessary Google Cloud provider plugins.
 
     ```bash
     terraform init
     ```
 
-4.  **Validate the Configuration (Optional but Recommended):**
+5.  **Validate the Configuration (Optional but Recommended):**
     Checks the syntax and configuration for errors.
 
     ```bash
     terraform validate
     ```
 
-5.  **Review the Deployment Plan:**
+6.  **Review the Deployment Plan:**
     This command shows you what resources Terraform will create, modify, or destroy.
 
     ```bash
     terraform plan
     ```
 
-6.  **Apply the Configuration:**
+7.  **Apply the Configuration:**
     This will provision the GKE cluster and associated resources in your Google Cloud account. This step can take approximately 10-20 minutes.
 
     ```bash
     terraform apply
     ```
+
     You will be prompted to confirm the action by typing `yes`.
 
 ## 👩‍💻 Working with kubectl
@@ -86,6 +98,7 @@ After successfully deploying the GKE cluster, you'll configure `kubectl` to inte
     ```bash
     gcloud container clusters get-credentials $(terraform output -raw cluster_name) --region $(terraform output -raw region) --project $(terraform output -raw project_id)
     ```
+
     *Note: The `terraform output -raw` commands assume you have set `cluster_name`, `region`, and `project_id` as outputs in your `outputs.tf` for easy retrieval.*
 
 2.  **Verify Cluster Connection:**

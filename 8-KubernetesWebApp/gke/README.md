@@ -115,6 +115,46 @@ After successfully deploying the GKE cluster, you'll configure `kubectl` to inte
     kubectl get all
     ```
 
+### Deploying and Accessing the Kubernetes Dashboard
+
+To deploy and access the Kubernetes Dashboard, follow these steps:
+
+1.  **Deploy the Dashboard:**
+    First, apply the Kubernetes Dashboard YAML manifest to your cluster. Make sure you have the `kubernetes-dashboard.yaml` file available in your current directory or provide its correct path.
+
+    ```bash
+    kubectl apply -f kubernetes-dashboard.yaml
+    ```
+
+2.  **Start the kubectl Proxy:**
+    Run the `kubectl proxy` command in your terminal. This will create a secure proxy to your Kubernetes API server. Keep this command running in the background or in a separate terminal window.
+
+    ```bash
+    kubectl proxy
+    ```
+
+3.  **Access the Dashboard:**
+    Once the proxy is running, you can access the Kubernetes Dashboard in your web browser using the following address:
+
+    **[http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/](http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)**
+
+    *Note: You will likely need to configure appropriate authentication to fully access and interact with the dashboard. Refer to the official Kubernetes Dashboard documentation for detailed authentication instructions.*
+
+4.  **Create Dashboard Admin Service Account:**
+    To enable administrative access to the dashboard, apply a YAML manifest that creates a service account and binds it to the `cluster-admin` role. Ensure you have the `kubernetes-dashboard-admin.yaml` file.
+
+    ```bash
+    kubectl apply -f kubernetes-dashboard-admin.yaml
+    ```
+
+5.  **Get Authentication Token:**
+    After creating the admin service account, retrieve its bearer token. You will use this token to log in to the Kubernetes Dashboard.
+
+    ```bash
+    kubectl -n kubernetes-dashboard create token admin-user
+    ```
+    Copy the generated token. Then, when prompted by the Kubernetes Dashboard in your browser, paste this token to gain access to your cluster's dashboard.
+
 ## 🧹 Clean Up Resources (Optional)
 
 To avoid incurring ongoing costs, you can remove all the resources provisioned by this Terraform configuration when you are finished.

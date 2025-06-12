@@ -96,10 +96,10 @@ After successfully deploying the GKE cluster, you'll configure `kubectl` to inte
     Run the following command to set up `kubectl` to connect to your new GKE cluster:
 
     ```bash
-    gcloud container clusters get-credentials $(terraform output -raw cluster_name) --region $(terraform output -raw region) --project $(terraform output -raw project_id)
+    gcloud container clusters get-credentials $(terraform output -raw kubernetes_cluster_name) --region $(terraform output -raw region)
     ```
 
-    *Note: The `terraform output -raw` commands assume you have set `cluster_name`, `region`, and `project_id` as outputs in your `outputs.tf` for easy retrieval.*
+    *Note: The `terraform output -raw` commands assume you have set `kubernetes_cluster_name` and `region` as outputs in your `outputs.tf` for easy retrieval. If your cluster output is named `cluster_name` instead of `kubernetes_cluster_name`, please adjust the command accordingly.*
 
 2.  **Verify Cluster Connection:**
     Check your cluster information to confirm `kubectl` is properly configured. You should see details about your cluster's control plane:

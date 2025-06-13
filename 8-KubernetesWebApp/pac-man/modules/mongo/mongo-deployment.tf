@@ -1,6 +1,6 @@
 resource "kubernetes_deployment" "mongo" {
   metadata {
-    name = "mongo"
+    name      = "mongo"
     namespace = var.kubernetes_namespace
 
     labels = {

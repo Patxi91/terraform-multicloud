@@ -1,6 +1,6 @@
 resource "kubernetes_deployment" "pac-man" {
   metadata {
-    name = "pac-man"
+    name      = "pac-man"
     namespace = var.kubernetes_namespace
 
     labels = {
@@ -26,7 +26,7 @@ resource "kubernetes_deployment" "pac-man" {
 
       spec {
         container {
-          name  = "pac-man"
+          name = "pac-man"
           #image = "quay.io/ifont/pacman-nodejs-app:latest"
           image = "docker.io/jessehoch/pacman-nodejs-app:latest" # Docker Hub image
 

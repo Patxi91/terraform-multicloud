@@ -1,6 +1,6 @@
 resource "kubernetes_service" "pac-man" {
   metadata {
-    name = "pac-man"
+    name      = "pac-man"
     namespace = var.kubernetes_namespace
 
     labels = {

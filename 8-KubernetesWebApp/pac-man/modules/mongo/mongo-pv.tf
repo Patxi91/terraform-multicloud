@@ -13,11 +13,11 @@ resource "kubernetes_persistent_volume" "mongo_pv" {
     storage_class_name               = "mongo-sc" # mongo-sc.tf
     persistent_volume_source {
       #aws_elastic_block_store {
-       # fstype = "ext4"
+      # fstype = "ext4"
       #}
       host_path {
         path = "/mnt/data"
-      }  
+      }
     }
   }
 }

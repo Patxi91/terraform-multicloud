@@ -130,3 +130,127 @@ pac-man/
         ├── mongo-service.tf      # Creates the service for the Backend Database, defining the port and the Load Balancer.
         └── variables.tf          # Declares variables for the MongoDB namespace, as defined in `kubernetes.tf`.
 ```
+
+## 🚀 Deployment Process
+
+Follow these steps to deploy the AWS EKS cluster:
+
+1.  **Navigate to the EKS directory:**
+
+    ```bash
+    cd eks/
+    ```
+
+2.  **Initialize Terraform:**
+    This command downloads the necessary AWS provider plugins.
+
+    ```bash
+    terraform init
+    ```
+
+3.  **Validate the Configuration (Optional but Recommended):**
+    Checks the syntax and configuration for errors.
+
+    ```bash
+    terraform validate
+    ```
+
+4.  **Review the Deployment Plan:**
+    This command shows you what resources Terraform will create, modify, or destroy.
+
+    ```bash
+    terraform plan
+    ```
+
+5.  **Apply the Configuration:**
+    This will provision the EKS cluster and associated resources in your AWS account. This step can take approximately 10-20 minutes.
+
+    ```bash
+    terraform apply
+    ```
+    You will be prompted to confirm the action by typing `yes`.
+
+## 👩‍💻 Working with kubectl
+
+After successfully deploying the EKS cluster, you'll configure `kubectl` to interact with your new cluster.
+
+1.  **Configure kubectl and point context to EKS cluster:**
+    It's important to add the EKS cluster to your `kubectl` context. Run the following command to set up `kubectl` to connect to your new EKS cluster:
+
+    ```bash
+    aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name) --no-verify-ssl
+    ```
+    *Note: The `terraform output -raw` commands assume you have set `region` and `cluster_name` as outputs in your `outputs.tf` for easy retrieval.*
+
+    You can verify the context has been added and switched:
+
+    ```bash
+    PS C:\Users\oyaga\Documents\repos\terraform-multicloud\8-KubernetesWebApp\eks> aws eks --region eu-north-1 update-kubeconfig --name my-eks-cluster-cvSYdLAu
+    Added new context arn:aws:eks:eu-north-1:727133197439:cluster/my-eks-cluster-cvSYdLAu to C:\Users\oyaga\.kube\config
+    PS C:\Users\oyaga\Documents\repos\terraform-multicloud\8-KubernetesWebApp\eks> kubectl config current-context
+    arn:aws:eks:eu-north-1:727133197439:cluster/my-eks-cluster-cvSYdLAu
+    PS C:\Users\oyaga\Documents\repos\terraform-multicloud\8-KubernetesWebApp\eks> kubectl get all
+    NAME          TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+    service/kubernetes ClusterIP   172.20.0.1   <none>        443/TCP   9m53s
+    ```
+
+2.  **Deploy the Pac-Man Application:**
+    Now that your EKS cluster is up and running and `kubectl` is configured, navigate to the `pac-man` application directory and deploy the application using Terraform.
+
+    ```bash
+    cd ../pac-man/
+    ```
+
+    Perform the standard Terraform workflow:
+
+    ```bash
+    terraform init
+    terraform validate
+    terraform plan
+    terraform apply
+    ```
+    You will be prompted to confirm the action by typing `yes`.
+
+3.  **Verify Pac-Man Application Deployment:**
+    After successful deployment, you can verify that the Pac-Man web application components are running on your EKS cluster. Navigate back to your `pac-man` directory and use `kubectl`:
+
+    ```bash
+    PS C:\Users\oyaga\Documents\repos\terraform-multicloud\8-KubernetesWebApp\pac-man> kubectl -n pac-man get all
+    NAME                            READY   STATUS    RESTARTS   AGE
+    pod/mongo-5b4dd67f59-wmmsq      1/1     Running   0          91s
+    pod/pac-man-f7ffcd9dc-xr5z5     1/1     Running   0          75s
+
+    NAME              TYPE           CLUSTER-IP      EXTERNAL-IP                                          PORT(S)           AGE
+    service/mongo     LoadBalancer   172.20.51.29    abc2448bb8fc44e738c43af6b9eb1f51-1729430022.eu-north-1.elb.amazonaws.com 27017:30475/TCP   91s
+    service/pac-man   LoadBalancer   172.20.56.56    aa18df06353c142c1bb13b2fe4a87c3c-1032585963.eu-north-1.elb.amazonaws.com 80:31764/TCP      75s
+
+    NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/mongo       1/1     1            1           91s
+    deployment.apps/pac-man     1/1     1            1           75s
+
+    NAME                                   DESIRED   CURRENT   READY   AGE
+    replicaset.apps/mongo-5b4dd67f59       1         1         1       91s
+    replicaset.apps/pac-man-f7ffcd9dc      1         1         1       75s
+    ```
+    This output confirms that the Pac-Man web application and its MongoDB backend have been deployed, showing the two pods, their respective services (MongoDB and Pac-Man), and the associated deployments and replica sets.
+
+4.  **Access the Pac-Man Application:**
+    To access your deployed Pac-Man application, take the `EXTERNAL-IP` from the `pac-man` service (e.g., `aa18df06353c142c1bb13b2fe4a87c3c-1032585963.eu-north-1.elb.amazonaws.com`) and paste it into your web browser. You should now be able to play Pac-Man!
+
+## 🧹 Clean Up Resources (Optional)
+
+To avoid incurring ongoing costs, you can remove all the resources provisioned by this Terraform configuration when you are finished. Ensure you are in the correct directory for each `terraform destroy` command (first `pac-man`, then `eks` or parent).
+
+1.  **Destroy Pac-Man application resources:**
+
+    ```bash
+    cd pac-man/ # Ensure you are in the pac-man directory
+    terraform destroy
+    ```
+
+2.  **Destroy EKS cluster resources:**
+
+    ```bash
+    cd ../eks/ # Navigate back to the eks directory
+    terraform destroy
+    ```

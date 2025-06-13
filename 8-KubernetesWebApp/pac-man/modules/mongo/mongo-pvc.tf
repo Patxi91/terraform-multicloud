@@ -1,6 +1,6 @@
 resource "kubernetes_persistent_volume_claim" "mongo_storage" {
   metadata {
-    name = "mongo-storage"
+    name      = "mongo-storage"
     namespace = var.kubernetes_namespace
   }
 

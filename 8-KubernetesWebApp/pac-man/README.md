@@ -237,6 +237,96 @@ After successfully deploying the EKS cluster, you'll configure `kubectl` to inte
 4.  **Access the Pac-Man Application:**
     To access your deployed Pac-Man application, take the `EXTERNAL-IP` from the `pac-man` service (e.g., `aa18df06353c142c1bb13b2fe4a87c3c-1032585963.eu-north-1.elb.amazonaws.com`) and paste it into your web browser. You should now be able to play Pac-Man!
 
+## 📈 Scaling the Pac-Man Application
+
+To support increased load or ensure higher availability for the Pac-Man application, you can easily scale the number of running pods for both the front-end and backend components.
+
+1.  **Check Current Pod Status:**
+    First, verify the current number of running pods for your application:
+
+    ```bash
+    kubectl -n pac-man get all
+    ```
+    You will observe that currently, there is typically 1 pod configured for both the MongoDB backend and the Pac-Man front-end, similar to:
+
+    ```
+    pod/mongo-5b4dd67f59-wmmsq      1/1
+    pod/pac-man-f7ffcd9dc-xr5z5     1/1
+    ```
+
+2.  **Modify Deployment Replicas:**
+    To scale the application, you need to modify the `replicas` count in the respective Terraform deployment files within the `pac-man` module:
+
+    * **Front-end (`modules/pac-man/pac-man-deployment.tf`):**
+        To scale the front-end to 3 pods, change the `replicas` value:
+
+        ```terraform
+        resource "kubernetes_deployment" "pac-man" {
+          metadata {
+            name      = "pac-man"
+            namespace = var.kubernetes_namespace
+
+            labels = {
+              name = "pac-man"
+            }
+          }
+
+          spec {
+            replicas = 3 # Scaled to 3
+            # ... rest of the spec ...
+          }
+        }
+        ```
+
+    * **Backend (`modules/mongo/mongo-deployment.tf`):**
+        To scale the backend to 2 pods, change the `replicas` value:
+
+        ```terraform
+        resource "kubernetes_deployment" "mongo" {
+          metadata {
+            name      = "mongo"
+            namespace = var.kubernetes_namespace
+
+            labels = {
+              name = "mongo"
+            }
+          }
+
+          spec {
+            replicas = 2 # Scaled to 2
+            # ... rest of the spec ...
+          }
+        }
+        ```
+
+3.  **Apply Changes:**
+    After modifying the `replicas` counts, apply the changes using Terraform from the `pac-man` directory:
+
+    ```bash
+    terraform apply
+    ```
+    You will be prompted to confirm the action by typing `yes`.
+
+4.  **Verify Scaled Pods:**
+    Double-check the changes by listing all resources again:
+
+    ```bash
+    kubectl -n pac-man get all
+    ```
+    You should now see the increased number of pods for both the MongoDB and Pac-Man deployments:
+
+    ```
+    NAME                                  READY   STATUS    RESTARTS   AGE
+    pod/mongo-695f6597f4-9dlqm            1/1     Running   0          31m
+    pod/mongo-695f6597f4-bv5ds            1/1     Running   0          77s
+    pod/pac-man-57955c9b46-6g8pr          1/1     Running   0          61s
+    pod/pac-man-57955c9b46-c6wlf          1/1     Running   0          30m
+    pod/pac-man-57955c9b46-nj7xq          1/1     Running   0          61s
+    # ... (other service, deployment, replicaset output)
+    ```
+
+To scale down, you can simply revert the `replicas` values in the deployment files to their original counts (e.g., `1` for both), and then run `terraform apply` again.
+
 ## 🧹 Clean Up Resources (Optional)
 
 To avoid incurring ongoing costs, you can remove all the resources provisioned by this Terraform configuration when you are finished. Ensure you are in the correct directory for each `terraform destroy` command (first `pac-man`, then `eks` or parent).

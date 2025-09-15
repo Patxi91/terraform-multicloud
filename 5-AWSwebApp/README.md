@@ -70,7 +70,7 @@ This file contains annotated explanations of the Terraform resources used to dep
 
 ---
 
-## 🌍 Access Your App
+## 🌍 Access Web App
 
 Visit [http://13.49.140.249/](http://13.49.140.249/) to view the running Flask application.
 
